@@ -1,0 +1,29 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: podinfo
+  namespace: default
+  annotations:
+    fluxcd.io/automated: "true"
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: podinfo
+      version: "6.0.x"
+      sourceRef:
+        kind: HelmRepository
+        name: podinfo
+        namespace: flux-system
+  values:
+    image:
+      repository: ghcr.io/stefanprodan/podinfo
+      tag: 6.0.0  # This will be updated automatically
+    resources:
+      requests:
+        cpu: 100m
+        memory: 64Mi
+    service:
+      enabled: true
+      type: ClusterIP
+      port: 9898

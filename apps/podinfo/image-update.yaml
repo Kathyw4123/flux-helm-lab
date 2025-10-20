@@ -1,0 +1,52 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: podinfo
+  namespace: default
+spec:
+  image: ghcr.io/stefanprodan/podinfo
+  interval: 1m
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: podinfo
+  namespace: default
+spec:
+  imageRepositoryRef:
+    name: podinfo
+  policy:
+    semver:
+      range: 6.0.x
+  filterTags:
+    pattern: '^6\.0\.[0-9]+$'
+    extract: '$0'
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageUpdateAutomation
+metadata:
+  name: podinfo
+  namespace: default
+spec:
+  interval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        name: fluxcd-bot
+        email: fluxcd-bot@users.noreply.github.com
+      messageTemplate: |
+        [ci skip] Update podinfo image
+        {{ range .Updated.Images }}
+          - {{ . }}
+        {{ end }}
+    push:
+      branch: main
+  update:
+    path: ./apps/podinfo
+    strategy: Setters
