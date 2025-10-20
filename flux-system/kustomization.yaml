@@ -4,6 +4,6 @@ resources:
 - gotk-components.yaml
 - gotk-sync.yaml
 - infrastructure/helm-repositories.yaml
-- infrastructure/redis-operator
-- apps/podinfo
-- apps/redis
+- infrastructure/redis-operator/helmrelease.yaml
+- apps/podinfo/helmrelease.yaml
+- apps/redis/helmrease.yaml
