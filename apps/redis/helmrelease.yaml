@@ -14,14 +14,7 @@ spec:
         name: bitnami
         namespace: flux-system
   values:
-    architecture: replication
-    sentinel:
-      enabled: true
-    auth:
-      enabled: false
-    replica:
-      replicaCount: 3
-    resources:
-      requests:
-        cpu: 100m
-        memory: 256Mi
+    image:
+      repository: bitnami/redis
+      tag: "7.0.10"  # use a valid tag
+    architecture: standalone  # or sentinel/cluster
